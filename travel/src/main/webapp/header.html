@@ -1,0 +1,137 @@
+<script src="js/getParameter.js"></script>
+<script>
+
+    $(function () {
+
+        $.get("/user/findUser",{},function (data) {
+            $(".shortcut").css("width","87%");
+            if(data.flag){
+                $(".shortcut").html(" <div class='login'><span>欢迎回来，"+data.data+"</span>" +
+                    "<a href='myfavorite.html' class='collection'>我的收藏</a>" +
+                    "<a href='javascript:location.href=\"user/exit\";'>退出</a></div>");
+                $(".login").css("width","20%")
+            }else {
+                $(".shortcut").html("<div class='login_out'><a href='login.html''><font size='4px'>登录</font></a>"+
+                    "<a href='register.html'><font size='4px'>注册</font></a></div>");
+            }
+        },"json");
+        $.get("/category/findCategory",{},function (data) {
+            var cid = getParameter("cid");
+            var kid = getParameter("kid");
+            if(cid !=null){
+                //拼接列表元素
+                var lis = ' <li id="fistPage"><a href="index.html">首页</a></li>';
+                for (var i=0;i<data.length;i++){
+                    if(i==cid-1 ){
+                        var li = '<li class="nav-active"><a href="route_list.html?cid='+data[i].cid+'">'+data[i].cname+'</a></li>';
+                    }else {
+                        var li = '<li><a href="route_list.html?cid='+data[i].cid+'">'+data[i].cname+'</a></li>';
+                    }
+                    lis += li;
+                }
+                lis+='<li><a href="favoriterank.html">收藏排行榜</a></li>';
+                lis+='<li><a href="javascript:back();">返回上一页</a></li>';
+                $("#category").html(lis);
+            }else {
+                if(kid==1){
+                    //拼接列表元素
+                    var lis = ' <li id="fistPage" ><a href="index.html">首页</a></li>';
+                    for (var i=0;i<data.length;i++){
+                        var li = '<li><a href="route_list.html?cid='+data[i].cid+'">'+data[i].cname+'</a></li>';
+                        lis += li;
+                    }
+                    lis+='<li class="nav-active"><a href="favoriterank.html?uid=1">收藏排行榜</a></li>';
+                    lis+='<li><a href="javascript:back();">返回上一页</a></li>';
+                    $("#category").html(lis);
+                }else {
+                    //拼接列表元素
+                    var lis = ' <li id="fistPage" class="nav-active"><a href="index.html">首页</a></li>';
+                    for (var i=0;i<data.length;i++){
+                        var li = '<li><a href="route_list.html?cid='+data[i].cid+'">'+data[i].cname+'</a></li>';
+                        lis += li;
+                    }
+                    lis+='<li><a href="favoriterank.html?kid=1">收藏排行榜</a></li>';
+                    lis+='<li><a href="javascript:back();">返回</a></li>';
+                    $("#category").html(lis);
+                }
+            }
+
+        },"json");
+
+    });
+    function search() {
+        var rname = $("#rname").val();
+        var cid = getParameter("cid");
+        var href = location.href;
+        var rgx = /.*favorite.*/;
+        //判断是不是从收藏界面发送的请求
+        if(rgx.test(href)){
+            //是收藏界面的请求
+            location.href = "myfavorite.html?&rname="+rname;
+        }else {
+            location.href = "route_list.html?cid="+cid+"&rname="+rname;
+        }
+
+    };
+
+    function back() {
+        window.history.back();
+    }
+</script>
+<style>
+
+</style>
+<!-- 头部 start -->
+    <header id="header">
+        <div class="top_banner">
+            <img src="images/top_banner.jpg" alt="">
+        </div>
+        <div class="shortcut">
+       <!--     &lt;!&ndash; 未登录状态  &ndash;&gt;
+            <div class="login_out">
+
+            </div>
+            &lt;!&ndash; 登录状态  &ndash;&gt;
+            <div class="login">
+
+            </div>-->
+        </div>
+        <div class="header_wrap">
+            <div class="topbar">
+                <div class="logo">
+                    <a href="/"><img src="images/logo.jpg" alt=""></a>
+                </div>
+                <div class="search">
+                    <input id="rname" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
+                    <a href="javascript:search();" id="search" class="search-button">搜索</a>
+                </div>
+                <div class="hottel">
+                    <div class="hot_pic">
+                        <img src="images/hot_tel.jpg" alt="">
+                    </div>
+                    <div class="hot_tel">
+                        <p class="hot_time">客服热线(9:00-6:00)</p>
+                        <p class="hot_num">400-618-9090</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- 头部 end -->
+     <!-- 首页导航 -->
+    <div class="navitem">
+        <ul id="category" class="nav">
+         <!--   <li class="nav-active"><a href="index.html">首页</a></li>
+            <li><a href="route_list.html">门票</a></li>
+            <li><a href="route_list.html">酒店</a></li>
+            <li><a href="route_list.html">香港车票</a></li>
+            <li><a href="route_list.html">出境游</a></li>
+            <li><a href="route_list.html">国内游</a></li>
+            <li><a href="route_list.html">港澳游</a></li>
+            <li><a href="route_list.html">抱团定制</a></li>
+            <li><a href="route_list.html">全球自由行</a></li>
+            <li><a href="favoriterank.html">收藏排行榜</a></li>-->
+        </ul>
+    </div>
+
+    

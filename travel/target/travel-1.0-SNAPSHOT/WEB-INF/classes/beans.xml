@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--<context:component-scan base-package="cn.itcast.travel.web"></context:component-scan>-->
+    <!--categroyService-->
+    <bean id="categoryService" class="cn.itcast.travel.service.impl.CategoryServiceImpl">
+        <property name="categoryDao" ref="categoryDao"></property>
+        <property name="jedis" ref="jedis"></property>
+    </bean>
+    <!--categoryDao-->
+    <bean id="categoryDao" class="cn.itcast.travel.dao.impl.CategoryDaoImpl">
+        <property name="template" ref="template"></property>
+    </bean>
+    <!--routeService-->
+    <bean id="routeService" class="cn.itcast.travel.service.impl.RouteServiceImpl">
+        <property name="routeDao" ref="routeDao"></property>
+        <property name="userDao" ref="userDao"></property>
+    </bean>
+    <!--routeDao-->
+    <bean id="routeDao" class="cn.itcast.travel.dao.impl.RouteDaoImpl">
+        <property name="template" ref="template"></property>
+    </bean>
+    <!--userService-->
+    <bean id="userService" class="cn.itcast.travel.service.impl.UserServiceImpl">
+        <property name="userDao" ref="userDao"></property>
+    </bean>
+    <!--userDao-->
+    <bean id="userDao" class="cn.itcast.travel.dao.impl.UserDaoImpl">
+        <property name="template" ref="template"></property>
+    </bean>
+    <!--jedis-->
+    <bean id="jedis" class="cn.itcast.travel.util.JedisUtil" factory-method="getJedis"></bean>
+    <!--template-->
+    <bean id="template" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--dataSrouce-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    <context:property-placeholder location="druid.properties"></context:property-placeholder>
+  <!--  <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSourceFactory" factory-method="createDataSource">
+        <constructor-arg>
+            <map>
+                <entry key="driverClassName" value="${driverClassName}"/>
+                <entry key="url" value="${url}"/>
+                <entry key="username" value="${user}"/>
+                <entry key="password" value="${password}"/>
+            </map>
+        </constructor-arg>
+    </bean>-->
+</beans>
